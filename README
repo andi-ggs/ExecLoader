@@ -1,0 +1,37 @@
+Georgescu Andreea-Daniela, 323CC
+Sisteme de Operare - Tema 1
+
+Functia handler contine marea parte din implementarea
+acestei teme, astfel:
+
+->cand handler-ul este folosit, initial acesta verifica 
+daca semnalul este de tip SIGSEGV, iar in caz contrar se
+ruleaza halder-ul default;
+
+->in cazul in care semnalul este unul SIGSEGV, se apeleaza
+functia get_seg, care parcurge fiecare segment, verifica
+daca adresa semnalului face parte din segmentul curent verificat
+si intoarce segmentul curent pentru a putea fi utilizat in
+restul functiei;
+
+->in caz contrar, se ruleaza handler-ul default in urma testarii
+variabilei ok, care primeste 1 daca fault-ul provine dintr-un
+segment cunoscut si 0 daca nu;
+
+->se calculeaza indexul paginii care a generat semnalul si se
+verifica daca pagina a fost sau nu mapata, folosind campul 'data';
+
+->in cazul in care pagina a fost deja mapata, se ruleaza handler-ul
+default;
+
+->campul data a fost alocat in functia so_execute ca un array
+de int cu numarul de elemente egal cu numarul de pagini + 1;
+
+->dupa ce se realizeaza maparea cu succes,se marcheaza pagina
+ca mapata in campul data, se apeleaza functia
+make_zeros care verifica, in functie de caz, in ce parte a segmentului
+se afla pagina pentru a zeroiza;
+
+->se restaureaza permisiunile in conformitate cu permisiunile
+segmentului cu ajutorul lui mprotect.
+ 
